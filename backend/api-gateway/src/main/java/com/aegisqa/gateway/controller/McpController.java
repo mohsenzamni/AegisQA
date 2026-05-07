@@ -39,8 +39,8 @@ public class McpController {
 
     @PostMapping("/tools/{toolName}/execute")
     @Operation(summary = "Execute an MCP tool")
-    public ResponseEntity<Map<String, Object>> executeTool(@PathVariable String toolName,
-                                                            @RequestBody Map<String, Object> params) {
+    public ResponseEntity<Map<String, Object>> executeTool(@PathVariable("toolName") String toolName,
+                                                             @RequestBody Map<String, Object> params) {
         McpToolValidator.ValidationResult validation = toolValidator.validate(toolName, params);
         if (!validation.valid()) {
             return ResponseEntity.badRequest().body(Map.of("success", false, "error", validation.errorMessage()));

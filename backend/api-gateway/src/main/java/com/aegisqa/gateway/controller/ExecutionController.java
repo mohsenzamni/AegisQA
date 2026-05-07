@@ -47,7 +47,7 @@ public class ExecutionController {
 
     @GetMapping("/{executionId}")
     @Operation(summary = "Get execution state", description = "Returns current state of a running or completed execution")
-    public ResponseEntity<ExecutionResponse> getExecution(@PathVariable String executionId) {
+    public ResponseEntity<ExecutionResponse> getExecution(@PathVariable("executionId") String executionId) {
         Optional<ExecutionState> state = orchestrationService.getState(executionId);
         return state.map(s -> ResponseEntity.ok(toResponse(s)))
                 .orElse(ResponseEntity.notFound().build());
@@ -55,15 +55,15 @@ public class ExecutionController {
 
     @PostMapping("/{executionId}/cancel")
     @Operation(summary = "Cancel execution")
-    public ResponseEntity<Void> cancel(@PathVariable String executionId) {
+    public ResponseEntity<Void> cancel(@PathVariable("executionId") String executionId) {
         orchestrationService.cancel(executionId);
         return ResponseEntity.accepted().build();
     }
 
     @PostMapping("/{executionId}/steps/{stepNumber}/retry")
     @Operation(summary = "Retry a failed step")
-    public ResponseEntity<Void> retryStep(@PathVariable String executionId,
-                                           @PathVariable int stepNumber) {
+    public ResponseEntity<Void> retryStep(@PathVariable("executionId") String executionId,
+                                           @PathVariable("stepNumber") int stepNumber) {
         orchestrationService.retryStep(executionId, stepNumber);
         return ResponseEntity.accepted().build();
     }
