@@ -1,0 +1,46 @@
+# Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# IDE
+.idea/
+*.iml
+.eclipse/
+.classpath
+.project
+.settings/
+*.swp
+*.swo
+.vscode/
+
+# Node / Frontend
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+frontend/dist/
+frontend/node_modules/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Reports / Artifacts
+reports/
+screenshots/
+videos/
+har/
+
+# Docker volumes
+postgres-data/
+
+# Spring Boot
+spring-shell.log
