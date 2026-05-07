@@ -7,6 +7,13 @@ spring:
     username: ${AEGISQA_DB_USER:sa}
     password: ${AEGISQA_DB_PASS:}
     driver-class-name: ${AEGISQA_DB_DRIVER:org.h2.Driver}
+    hikari:
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 600000
+      keepalive-time: 60000
+      minimum-idle: 2
+      maximum-pool-size: 10
 
   jpa:
     hibernate:
