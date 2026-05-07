@@ -52,6 +52,9 @@ springdoc:
     tags-sorter: alpha
 
 aegisqa:
+  acs:
+    admin-url: ${ACS_ADMIN_URL:http://192.168.0.65:8080/mia/}
+    brw-url: ${ACS_BRW_URL:http://req.testlab.3dsecure.cloud:8082/brw}
   browser:
     headless: ${BROWSER_HEADLESS:true}
     timeout-ms: ${BROWSER_TIMEOUT_MS:30000}

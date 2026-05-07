@@ -97,6 +97,8 @@ OPENAI_API_KEY=your-key docker compose --profile with-ai up -d
 | `LITELLM_API_KEY` | `dummy-key` | LLM API key |
 | `LITELLM_MODEL` | `gpt-4o` | Model name |
 | `BROWSER_HEADLESS` | `true` | Headless Chromium |
+| `ACS_ADMIN_URL` | `http://192.168.0.65:8080/mia/` | ACS admin UI base URL |
+| `ACS_BRW_URL` | `http://req.testlab.3dsecure.cloud:8082/brw` | BRW transaction page URL |
 | `AEGISQA_DB_URL` | H2 in-memory | JDBC URL |
 
 ## 📝 Scenario Formats

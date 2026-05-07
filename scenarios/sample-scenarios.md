@@ -27,3 +27,23 @@ Create risk chain
 Check the whitelist checkbox
 Do a Visa transaction
 Transaction status should be Y
+
+## TC-005: Issuer Settings + Transaction (Configurable URLs)
+Configure issuer settings (BIN range, default EMV, challenge preference)
+Disable purchaseDate validation in issuer setting
+Do a transaction with amount/currency/cardNumber/expiry/cvv
+Transaction status should be Y
+
+## TC-006: Gmail First Mail (Generic Browser)
+Navigate to https://mail.google.com
+Wait for Inbox
+Open first email row
+Take screenshot
+Assert Inbox text exists
+
+## TC-007: Browser Search Keyword (Generic Browser)
+Navigate to https://www.google.com
+Fill search textbox with "AegisQA 3DS testing"
+Click search button
+Wait for AegisQA text
+Assert AegisQA appears in results

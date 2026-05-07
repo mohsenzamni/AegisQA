@@ -29,12 +29,73 @@ canonical_actions:
         required: false
         values: [frictionless, challenge, decline]
 
+  - action: configure_issuer_settings
+    description: Configure issuer settings before transactions
+    params:
+      - name: binRange
+        required: false
+      - name: defaultEmvVersion
+        required: false
+        values: ["2.1", "2.2", "2.3"]
+      - name: challengePreference
+        required: false
+        values: [challenge, frictionless, auto]
+
+  - action: disable_purchase_date_validation
+    description: Disable purchaseDate validation in issuer settings
+    params: []
+
+  - action: configure_bin_range
+    description: Configure issuer BIN range
+    params:
+      - name: binRange
+        required: true
+
+  - action: set_emv_version_default
+    description: Set default EMV version in issuer settings
+    params:
+      - name: version
+        required: true
+        values: ["2.1", "2.2", "2.3"]
+
+  - action: set_challenge_preference
+    description: Set challenge preference in issuer settings
+    params:
+      - name: preference
+        required: true
+        values: [challenge, frictionless, auto]
+
   - action: run_transaction
     description: Execute a payment scheme transaction
     params:
       - name: scheme
-        required: true
+        required: false
         values: [visa, mastercard, amex, jcb, discover]
+      - name: version
+        required: false
+        values: ["2.1", "2.2", "2.3"]
+      - name: amount
+        required: false
+      - name: currency
+        required: false
+      - name: cardNumber
+        required: false
+      - name: expiry
+        required: false
+      - name: cvv
+        required: false
+      - name: purchaseDate
+        required: false
+      - name: challengeIndicator
+        required: false
+      - name: cardholderName
+        required: false
+      - name: email
+        required: false
+      - name: merchantCategoryCode
+        required: false
+      - name: whitelist
+        required: false
 
   - action: run_emv_transaction
     description: Execute an EMV 3DS specific transaction

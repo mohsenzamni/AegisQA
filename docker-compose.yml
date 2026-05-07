@@ -62,6 +62,8 @@ services:
       LITELLM_API_KEY: ${LITELLM_MASTER_KEY:-sk-aegisqa-dev}
       LITELLM_MODEL: ${LITELLM_MODEL:-gpt-4o}
       BROWSER_HEADLESS: "true"
+      ACS_ADMIN_URL: ${ACS_ADMIN_URL:-http://192.168.0.65:8080/mia/}
+      ACS_BRW_URL: ${ACS_BRW_URL:-http://req.testlab.3dsecure.cloud:8082/brw}
       REPORTS_DIR: /app/reports
       SERVER_PORT: 8080
     volumes:

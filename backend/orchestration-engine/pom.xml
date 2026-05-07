@@ -18,6 +18,10 @@
             <artifactId>domain-module</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.aegisqa</groupId>
+            <artifactId>browser-executor</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>

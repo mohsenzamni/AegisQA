@@ -15,6 +15,11 @@ public enum CanonicalActionType {
     SET_RISK_SCORE("set_risk_score", "Set frictionless score range"),
     CONFIGURE_WHITELIST("configure_whitelist", "Configure whitelist settings"),
     ENABLE_WHITELIST("enable_whitelist", "Enable whitelist on BIN"),
+    CONFIGURE_ISSUER_SETTINGS("configure_issuer_settings", "Configure issuer settings"),
+    DISABLE_PURCHASE_DATE_VALIDATION("disable_purchase_date_validation", "Disable purchase date validation"),
+    CONFIGURE_BIN_RANGE("configure_bin_range", "Configure BIN range"),
+    SET_EMV_VERSION_DEFAULT("set_emv_version_default", "Set default EMV version"),
+    SET_CHALLENGE_PREFERENCE("set_challenge_preference", "Set challenge preference"),
 
     // Transaction execution
     RUN_TRANSACTION("run_transaction", "Execute a payment scheme transaction"),

@@ -17,13 +17,17 @@ public class RiskManagementPage extends PageObject {
     private static final String INPUT_SCORE_MIN = "[name='scoreMin'], [data-testid='score-min']";
     private static final String INPUT_SCORE_MAX = "[name='scoreMax'], [data-testid='score-max']";
     private static final String BTN_SAVE = "button:has-text('Save'), button:has-text('Submit')";
+    private final String adminBaseUrl;
 
-    public RiskManagementPage(Page page) {
+    public RiskManagementPage(Page page, String adminBaseUrl) {
         super(page);
+        this.adminBaseUrl = adminBaseUrl;
     }
 
     public void openRiskManagement() {
         log.info("Opening Risk Management module");
+        page.navigate(adminBaseUrl);
+        waitForIdle();
         click(MENU_RISK_MANAGEMENT);
         waitForIdle();
     }
