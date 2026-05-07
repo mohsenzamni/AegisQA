@@ -1,6 +1,7 @@
 package com.aegisqa.browser.page;
 
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,18 +64,20 @@ public abstract class PageObject {
     }
 
     /**
-     * Click an element.
+     * Click an element, waiting for it to become visible first.
      */
     public void click(String selector) {
         log.debug("Click: {}", selector);
+        page.waitForSelector(selector, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
         page.click(selector);
     }
 
     /**
-     * Fill a form field.
+     * Fill a form field, waiting for the element to become visible first.
      */
     public void fill(String selector, String value) {
         log.debug("Fill: {} = [MASKED]", selector);
+        page.waitForSelector(selector, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
         page.fill(selector, value);
     }
 }

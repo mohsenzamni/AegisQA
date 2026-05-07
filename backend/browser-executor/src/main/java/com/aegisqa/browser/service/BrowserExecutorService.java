@@ -3,6 +3,7 @@ package com.aegisqa.browser.service;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,19 +72,23 @@ public class BrowserExecutorService {
     }
 
     /**
-     * Click an element.
+     * Click an element, waiting for it to become visible first.
      */
     public void click(String executionId, String selector) {
         log.debug("[{}] Click: {}", executionId, selector);
-        getPage(executionId).click(selector);
+        Page page = getPage(executionId);
+        page.waitForSelector(selector, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
+        page.click(selector);
     }
 
     /**
-     * Fill a form field.
+     * Fill a form field, waiting for the element to become visible first.
      */
     public void fill(String executionId, String selector, String value) {
         log.debug("[{}] Fill: {}", executionId, selector);
-        getPage(executionId).fill(selector, value);
+        Page page = getPage(executionId);
+        page.waitForSelector(selector, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
+        page.fill(selector, value);
     }
 
     /**
