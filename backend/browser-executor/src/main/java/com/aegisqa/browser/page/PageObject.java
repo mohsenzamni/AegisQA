@@ -74,7 +74,7 @@ public abstract class PageObject {
      * Fill a form field.
      */
     public void fill(String selector, String value) {
-        log.debug("Fill: {} = (value)", selector);
+        log.debug("Fill: {} = [MASKED]", selector);
         page.fill(selector, value);
     }
 }

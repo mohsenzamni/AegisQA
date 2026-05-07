@@ -1,0 +1,20 @@
+name: Challenge Mastercard 2.1
+description: >
+  Verifies that a Mastercard EMV 3DS 2.1 transaction triggers a challenge
+  when RBA returns challenge for the configured score range.
+
+steps:
+  - action: add_rba_adapter
+  - action: create_risk_chain
+    name: challenge_chain
+  - action: set_risk_score
+    min: "50"
+    max: "100"
+    result: challenge
+  - action: run_emv_transaction
+    version: "2.1"
+    scheme: mastercard
+  - action: verify_transaction_status
+    expected: "C"
+  - action: verify_ares
+    expected: "C"

@@ -64,22 +64,9 @@ public class ReportingService {
         String htmlPath = htmlGenerator.generate(report);
         String jsonPath = jsonGenerator.generate(report);
 
-        return ExecutionReport.builder()
-                .reportId(report.getReportId())
-                .executionId(report.getExecutionId())
-                .scenarioId(report.getScenarioId())
-                .scenarioName(report.getScenarioName())
-                .finalStatus(report.getFinalStatus())
-                .startedAt(report.getStartedAt())
-                .completedAt(report.getCompletedAt())
-                .durationMs(report.getDurationMs())
-                .totalSteps(report.getTotalSteps())
-                .passedSteps(report.getPassedSteps())
-                .failedSteps(report.getFailedSteps())
-                .stepResults(steps)
-                .allAssertions(allAssertions)
-                .htmlReportPath(htmlPath)
-                .jsonReportPath(jsonPath)
-                .build();
+        // Add artifact paths to the report
+        report.setHtmlReportPath(htmlPath);
+        report.setJsonReportPath(jsonPath);
+        return report;
     }
 }

@@ -62,12 +62,7 @@ public class InMemoryExecutionStateManager implements ExecutionStateManager {
     @Override
     public void setContextValue(String executionId, String key, String value) {
         store.computeIfPresent(executionId, (id, state) -> {
-            switch (key) {
-                case "transactionId" -> state.setTransactionId(value);
-                case "riskChainId" -> state.setRiskChainId(value);
-                case "browserSessionId" -> state.setBrowserSessionId(value);
-                default -> log.debug("Context key '{}' stored (not a known field)", key);
-            }
+            state.setContextValue(key, value);
             return state;
         });
     }

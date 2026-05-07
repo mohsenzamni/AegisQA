@@ -47,6 +47,8 @@ public class ScenarioService {
         return parse(content, name, source);
     }
 
+    private static final int EXCEL_BASE64_MIN_LENGTH = 200;
+
     private ScenarioSource autoDetect(String content) {
         if (content == null) return ScenarioSource.PLAIN_TEXT;
         String trimmed = content.trim();
@@ -57,7 +59,7 @@ public class ScenarioService {
             return ScenarioSource.MARKDOWN;
         }
         // base64 check for Excel
-        if (trimmed.matches("^[A-Za-z0-9+/=\\s]+$") && trimmed.length() > 200) {
+        if (trimmed.matches("^[A-Za-z0-9+/=\\s]+$") && trimmed.length() > EXCEL_BASE64_MIN_LENGTH) {
             return ScenarioSource.EXCEL;
         }
         return ScenarioSource.PLAIN_TEXT;

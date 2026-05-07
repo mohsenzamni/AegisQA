@@ -5,7 +5,9 @@ import lombok.Data;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Live execution state for a running scenario.
@@ -20,7 +22,7 @@ public class ExecutionState {
     private int currentStep;
     private int totalSteps;
 
-    // ACS-specific state
+    // Well-known ACS-specific state fields (also stored in context for easy access)
     private String transactionId;
     private String riskChainId;
     private String browserSessionId;
@@ -32,6 +34,10 @@ public class ExecutionState {
     // Step results
     @Builder.Default
     private List<StepResult> stepResults = new ArrayList<>();
+
+    // Arbitrary context values (supports extensions beyond the well-known fields)
+    @Builder.Default
+    private Map<String, String> context = new HashMap<>();
 
     // Error tracking
     private String lastError;
@@ -47,5 +53,24 @@ public class ExecutionState {
 
     public void addStepResult(StepResult result) {
         stepResults.add(result);
+    }
+
+    /**
+     * Store an arbitrary context value.
+     * Also updates well-known fields (transactionId, riskChainId, browserSessionId)
+     * for backwards compatibility and convenience.
+     */
+    public void setContextValue(String key, String value) {
+        context.put(key, value);
+        switch (key) {
+            case "transactionId" -> transactionId = value;
+            case "riskChainId" -> riskChainId = value;
+            case "browserSessionId" -> browserSessionId = value;
+            default -> { /* stored only in context map */ }
+        }
+    }
+
+    public String getContextValue(String key) {
+        return context.get(key);
     }
 }

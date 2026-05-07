@@ -1,0 +1,60 @@
+name: recovery
+version: "1.0"
+description: >
+  Recovery skill for handling UI flakiness, session expiration, blocking modals,
+  and loading stalls during ACS automated test execution.
+
+detectors:
+  - name: modal_detector
+    description: Detects blocking modal dialogs
+    selectors:
+      - "[role='dialog']"
+      - ".modal:visible"
+      - ".modal-dialog:visible"
+    recovery_action: dismiss_modal
+
+  - name: session_expiration
+    description: Detects ACS session expiration
+    indicators:
+      - "text=Session expired"
+      - "text=Please log in"
+      - "input[name='username']"
+    recovery_action: restore_session
+
+  - name: loading_stall
+    description: Detects stalled loading states
+    indicators:
+      - ".spinner:visible"
+      - ".loading:visible"
+    recovery_action: wait_and_retry
+
+recovery_actions:
+  - name: dismiss_modal
+    description: Dismiss a blocking modal dialog
+    strategies:
+      - click: "button:has-text('Close')"
+      - click: "button:has-text('Cancel')"
+      - click: "[aria-label='Close']"
+      - key: Escape
+
+  - name: restore_session
+    description: Re-authenticate and restore browser session
+    steps:
+      - navigate: ${ACS_BASE_URL}/login
+      - fill: {selector: "[name='username']", value: "${ACS_USERNAME}"}
+      - fill: {selector: "[name='password']", value: "${ACS_PASSWORD}"}
+      - click: "button[type='submit']"
+
+  - name: wait_and_retry
+    description: Wait for page to stabilize and retry last action
+    wait_ms: 3000
+    max_retries: 3
+
+  - name: reload_page
+    description: Reload the current page
+    wait_after_ms: 1000
+
+policies:
+  max_recovery_attempts_per_step: 2
+  recovery_timeout_ms: 30000
+  capture_screenshot_on_recovery: true

@@ -1,0 +1,81 @@
+name: acs
+version: "1.0"
+description: >
+  ACS (Access Control Server) domain skill covering EMV 3DS transaction flows,
+  risk management configuration, and whitelist operations.
+
+canonical_actions:
+  - action: add_rba_adapter
+    description: Add a Risk-Based Authentication adapter to the ACS
+    params: []
+
+  - action: create_risk_chain
+    description: Create a risk evaluation chain
+    params:
+      - name: chainName
+        required: false
+        default: "default"
+
+  - action: set_risk_score
+    description: Configure frictionless/challenge score ranges
+    params:
+      - name: min
+        required: true
+        type: integer
+      - name: max
+        required: true
+        type: integer
+      - name: result
+        required: false
+        values: [frictionless, challenge, decline]
+
+  - action: run_transaction
+    description: Execute a payment scheme transaction
+    params:
+      - name: scheme
+        required: true
+        values: [visa, mastercard, amex, jcb, discover]
+
+  - action: run_emv_transaction
+    description: Execute an EMV 3DS specific transaction
+    params:
+      - name: version
+        required: true
+        values: ["2.1", "2.2", "2.3"]
+
+  - action: verify_transaction_status
+    description: Verify the ACS transaction authentication status
+    params:
+      - name: expected
+        required: true
+        values: [Y, C, N, U, R, A]
+        description: EMVCo 3DS transaction status code
+
+  - action: verify_ares
+    description: Verify an ARes message field value
+    params:
+      - name: field
+        required: false
+      - name: expected
+        required: true
+
+  - action: verify_rreq
+    description: Verify an RReq message field value
+    params:
+      - name: expected
+        required: true
+
+  - action: configure_whitelist
+    description: Enable or configure whitelist on a BIN range
+    params:
+      - name: enabled
+        required: false
+        default: "true"
+
+status_codes:
+  Y: "Authentication Successful (Frictionless)"
+  C: "Challenge Required"
+  N: "Not Authenticated"
+  U: "Authentication Could Not Be Performed"
+  R: "Authentication Rejected"
+  A: "Attempts Processing"
