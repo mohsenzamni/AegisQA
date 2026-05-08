@@ -1,6 +1,7 @@
 package com.aegisqa.orchestration.executor;
 
 import com.aegisqa.browser.page.IssuerSettingsPage;
+import com.aegisqa.browser.page.LoginPage;
 import com.aegisqa.browser.page.RiskManagementPage;
 import com.aegisqa.browser.page.TransactionPage;
 import com.aegisqa.browser.service.BrowserExecutorService;
@@ -57,6 +58,13 @@ public class StepExecutionDispatcher {
 
         switch (actionType) {
             case NAVIGATE_TO -> browserExecutorService.navigate(executionId, requiredString(params, "url"));
+            case LOGIN -> {
+                String loginUrl = params.containsKey("url")
+                        ? params.get("url").toString()
+                        : adminUrl;
+                LoginPage loginPage = new LoginPage(browserExecutorService.getPage(executionId), loginUrl);
+                loginPage.login(requiredString(params, "username"), requiredString(params, "password"));
+            }
             case CLICK -> browserExecutorService.click(executionId, requiredString(params, "selector"));
             case FILL -> browserExecutorService.fill(executionId,
                     requiredString(params, "selector"), requiredString(params, "value"));
