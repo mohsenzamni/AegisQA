@@ -37,11 +37,11 @@ public class LoginPage extends PageObject {
         waitForIdle();
 
         log.info("Filling login credentials");
-        fill(INPUT_USERNAME, username);
-        fill(INPUT_PASSWORD, password);
+        page.locator(INPUT_USERNAME).first().fill(username);
+        page.locator(INPUT_PASSWORD).first().fill(password);
 
         log.info("Submitting login form");
-        click(BTN_SUBMIT);
+        page.locator(BTN_SUBMIT).first().click();
         waitForIdle();
 
         screenshot("login_result");
