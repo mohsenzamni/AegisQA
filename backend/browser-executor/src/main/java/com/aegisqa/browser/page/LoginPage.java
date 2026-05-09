@@ -1,6 +1,8 @@
 package com.aegisqa.browser.page;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -36,12 +38,20 @@ public class LoginPage extends PageObject {
         page.navigate(loginUrl);
         waitForIdle();
 
-        log.info("Filling login credentials");
-        page.locator(INPUT_USERNAME).first().fill(username);
-        page.locator(INPUT_PASSWORD).first().fill(password);
+        log.info("Filling username");
+        Locator usernameField = page.locator(INPUT_USERNAME).first();
+        usernameField.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        usernameField.fill(username);
 
-        log.info("Submitting login form");
-        page.locator(BTN_SUBMIT).first().click();
+        log.info("Filling password");
+        Locator passwordField = page.locator(INPUT_PASSWORD).first();
+        passwordField.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        passwordField.fill(password);
+
+        log.info("Clicking submit button");
+        Locator submitBtn = page.locator(BTN_SUBMIT).first();
+        submitBtn.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        submitBtn.click();
         waitForIdle();
 
         screenshot("login_result");
