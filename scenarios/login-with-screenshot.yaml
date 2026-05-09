@@ -1,0 +1,12 @@
+name: Login with Screenshot
+description: >
+  Live execution scenario that navigates to the ACS admin login page,
+  enters username and password into the form, submits it, and captures
+  a screenshot of the resulting page for visual verification.
+
+steps:
+  - action: login
+    username: admin
+    password: admin
+  - action: take_screenshot
+    label: "login_result"
