@@ -1,0 +1,34 @@
+name: browser
+version: "1.0"
+description: >
+  Playwright-backed browser automation skill for ACS UI testing.
+  Provides deterministic, validated browser actions via the MCP tool interface.
+
+tools:
+  - name: open_page
+    description: Navigate the browser to a URL
+    required: [executionId, url]
+
+  - name: click_element
+    description: Click a UI element by CSS selector or text
+    required: [executionId, selector]
+
+  - name: fill_input
+    description: Fill a form input field
+    required: [executionId, selector, value]
+
+  - name: wait_for_text
+    description: Wait until a text string appears in the page
+    required: [executionId, text]
+
+  - name: capture_screenshot
+    description: Capture a screenshot of the current browser state
+    required: [executionId]
+    optional: [label]
+
+constraints:
+  - Browser is always launched headless in CI; headless can be overridden for debug
+  - Each execution uses an isolated BrowserContext (no shared session state)
+  - All selectors are validated before execution via McpToolValidator
+  - Screenshots are stored under reports/{executionId}/screenshots/
+  - Videos are recorded per execution under reports/{executionId}/videos/

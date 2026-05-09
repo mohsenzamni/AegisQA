@@ -1,0 +1,18 @@
+name: Gmail Read First Email
+description: >
+  Generic browser automation sample that opens Gmail, reads the first email row,
+  and asserts expected text is visible.
+
+steps:
+  - action: navigate_to
+    url: "https://mail.google.com"
+  - action: wait_for
+    text: "Inbox"
+  - action: click
+    selector: "tr.zA:first-child"
+  - action: wait_for
+    text: "@"
+  - action: take_screenshot
+    label: "gmail-first-email"
+  - action: assert_ui_text
+    expected: "Inbox"

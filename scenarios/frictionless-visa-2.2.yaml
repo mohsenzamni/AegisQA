@@ -1,0 +1,19 @@
+name: Frictionless Visa 2.2
+description: >
+  Verifies that a Visa EMV 3DS 2.2 transaction is authenticated frictionlessly
+  when RBA is configured to approve all transactions (score 0-100 frictionless).
+
+steps:
+  - action: add_rba_adapter
+  - action: create_risk_chain
+    name: default_chain
+  - action: set_risk_score
+    min: "0"
+    max: "100"
+    result: frictionless
+  - action: run_transaction
+    scheme: visa
+  - action: verify_transaction_status
+    expected: "Y"
+  - action: verify_ares
+    expected: "Y"

@@ -1,0 +1,76 @@
+rules:
+  - match: "(?i)create\\s+risk\\s+chain"
+    action: "create_risk_chain"
+
+  - match: "(?i)add\\s+rba\\s+adapter"
+    action: "add_rba_adapter"
+
+  - match: "(?i)set\\s+score\\s+frictionless\\s+(\\d+)\\.\\.(\\d+)"
+    action: "set_risk_score"
+    parameters:
+      - name: "min"
+        captureGroup: 1
+      - name: "max"
+        captureGroup: 2
+      - name: "result"
+        value: "frictionless"
+
+  - match: "(?i)do\\s+(?:a\\s+)?(visa|mastercard|amex)\\s+transaction"
+    action: "run_transaction"
+    parameters:
+      - name: "scheme"
+        captureGroup: 1
+
+  - match: "(?i)transaction\\s+status\\s+should\\s+be\\s+(\\w+)"
+    action: "verify_transaction_status"
+    parameters:
+      - name: "expected"
+        captureGroup: 1
+
+  - match: "(?i)do\\s+a\\s+emv\\s+(\\d+\\.\\d+)\\s+transaction"
+    action: "run_emv_transaction"
+    parameters:
+      - name: "version"
+        captureGroup: 1
+
+  - match: "(?i)check\\s+the\\s+whitelist\\s+checkbox"
+    action: "enable_whitelist"
+
+  - match: "(?i)whitelist\\s+is\\s+(?:enabled|active)\\s+on\\s+bin"
+    action: "configure_whitelist"
+    parameters:
+      - name: "enabled"
+        value: "true"
+
+  - match: "(?i)rba\\s+returns\\s+challenge"
+    action: "configure_rba_challenge"
+
+  - match: "(?i)verify\\s+ares\\s+(?:is\\s+|=\\s*)(\\w+)"
+    action: "verify_ares"
+    parameters:
+      - name: "expected"
+        captureGroup: 1
+
+  - match: "(?i)rreq\\s*=\\s*(\\w+)"
+    action: "verify_rreq"
+    parameters:
+      - name: "expected"
+        captureGroup: 1
+
+  - match: "(?i)merchant\\s+is\\s+added"
+    action: "verify_merchant_added"
+
+  - match: "(?i)navigate\\s+to\\s+(.+)"
+    action: "navigate_to"
+    parameters:
+      - name: "target"
+        captureGroup: 1
+
+  - match: "(?i)login\\s+(?:as\\s+)?(.+)"
+    action: "login"
+    parameters:
+      - name: "user"
+        captureGroup: 1
+
+  - match: "(?i)take\\s+(?:a\\s+)?screenshot"
+    action: "take_screenshot"

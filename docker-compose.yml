@@ -1,0 +1,93 @@
+version: "3.9"
+
+services:
+  # ─── PostgreSQL Database ───────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: aegisqa-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: aegisqa
+      POSTGRES_USER: aegisqa
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aegisqa_dev}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aegisqa"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── LiteLLM Proxy (connects to any LLM backend) ─────────────────────────
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    container_name: aegisqa-litellm
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-aegisqa-dev}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      AZURE_API_KEY: ${AZURE_API_KEY:-}
+      AZURE_API_BASE: ${AZURE_API_BASE:-}
+    command: >
+      --model gpt-4o
+      --model azure/gpt-4o
+      --port 4000
+    profiles:
+      - with-ai
+
+  # ─── AegisQA Backend API ───────────────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: aegisqa-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      AEGISQA_DB_URL: jdbc:postgresql://postgres:5432/aegisqa
+      AEGISQA_DB_USER: aegisqa
+      AEGISQA_DB_PASS: ${POSTGRES_PASSWORD:-aegisqa_dev}
+      AEGISQA_DB_DRIVER: org.postgresql.Driver
+      AEGISQA_DB_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      LITELLM_BASE_URL: http://litellm:4000
+      LITELLM_API_KEY: ${LITELLM_MASTER_KEY:-sk-aegisqa-dev}
+      LITELLM_MODEL: ${LITELLM_MODEL:-gpt-4o}
+      BROWSER_HEADLESS: "true"
+      ACS_ADMIN_URL: ${ACS_ADMIN_URL:-http://192.168.0.65:8080/mia/}
+      ACS_BRW_URL: ${ACS_BRW_URL:-http://req.testlab.3dsecure.cloud:8082/brw}
+      REPORTS_DIR: /app/reports
+      SERVER_PORT: 8080
+    volumes:
+      - reports-data:/app/reports
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ─── Nginx — serves frontend + proxies API ────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    container_name: aegisqa-nginx
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./infrastructure/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    profiles:
+      - with-nginx
+
+volumes:
+  postgres-data:
+  reports-data:

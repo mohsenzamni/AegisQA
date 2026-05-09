@@ -1,0 +1,19 @@
+name: Google Search Verification
+description: >
+  Generic browser automation sample that searches for a keyword and verifies
+  expected text in search results.
+
+steps:
+  - action: navigate_to
+    url: "https://www.google.com"
+  - action: fill
+    selector: "textarea[name='q']"
+    value: "AegisQA 3DS testing"
+  - action: click
+    selector: "input[name='btnK']"
+  - action: wait_for
+    text: "AegisQA"
+  - action: take_screenshot
+    label: "google-search-results"
+  - action: assert_ui_text
+    expected: "AegisQA"

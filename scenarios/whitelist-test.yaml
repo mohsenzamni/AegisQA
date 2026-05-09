@@ -1,0 +1,18 @@
+name: Whitelist Enabled Test
+description: >
+  Verifies that when the whitelist checkbox is enabled on a BIN and
+  a transaction is executed, the whitelist status is returned in the response.
+
+steps:
+  - action: add_rba_adapter
+  - action: create_risk_chain
+    name: whitelist_chain
+  - action: configure_whitelist
+    enabled: "true"
+  - action: enable_whitelist
+  - action: run_transaction
+    scheme: visa
+  - action: verify_transaction_status
+    expected: "Y"
+  - action: verify_whitelist_status
+    expected: "Y"

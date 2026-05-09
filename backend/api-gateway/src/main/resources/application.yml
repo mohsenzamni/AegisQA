@@ -1,0 +1,76 @@
+spring:
+  application:
+    name: aegisqa-platform
+
+  datasource:
+    url: ${AEGISQA_DB_URL:jdbc:h2:mem:aegisqa;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+    username: ${AEGISQA_DB_USER:sa}
+    password: ${AEGISQA_DB_PASS:}
+    driver-class-name: ${AEGISQA_DB_DRIVER:org.h2.Driver}
+    hikari:
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 600000
+      keepalive-time: 60000
+      minimum-idle: 2
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: ${AEGISQA_DB_DIALECT:org.hibernate.dialect.H2Dialect}
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  ai:
+    openai:
+      api-key: ${LITELLM_API_KEY:dummy-key}
+      base-url: ${LITELLM_BASE_URL:http://localhost:4000}
+      chat:
+        options:
+          model: ${LITELLM_MODEL:gpt-4o}
+          temperature: 0.1
+
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: always
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+
+aegisqa:
+  acs:
+    admin-url: ${ACS_ADMIN_URL:http://192.168.0.65:8080/mia/}
+    brw-url: ${ACS_BRW_URL:http://req.testlab.3dsecure.cloud:8082/brw}
+  browser:
+    headless: ${BROWSER_HEADLESS:true}
+    timeout-ms: ${BROWSER_TIMEOUT_MS:30000}
+  reports:
+    dir: ${REPORTS_DIR:reports}
+
+logging:
+  level:
+    com.aegisqa: INFO
+    org.springframework.ai: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{executionId}] %-5level %logger{36} - %msg%n"
